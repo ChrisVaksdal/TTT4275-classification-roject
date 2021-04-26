@@ -1,57 +1,26 @@
-from sklearn.datasets import load_iris
-from pathlib import Path
 import numpy as np
 
-iris = load_iris
-# Sette et 1 tall bak alt
-#Dataen X har en form på 1x4, men man har lyst til å legge til et 1-tall på slutten slik at vi får en matrise på formen 1x5.
-# D = fetures
-# C = classer
-# Make the dataOpen dir and r
+def ones_divide(filename, test_set, featur):  # add ones to the data, and divide into test and trial data
+    iris = np.loadtxt(filename, dtype='float_', delimiter=',')
+    iris = np.vstack(iris)  # vstak, so it is easier to add ones
 
-# heyehye
+    ones = np.ones(len(iris))  # matrix of ones
+    ones = ones.reshape(-1,1)  # reshape so it macth Iris
 
+    add_ones = np.append(iris, ones, axis=1)  # addes ones to iris
 
-# def add_one(filepath):
-#     entries = Path(filepath)
-#     i = 1
-#     for entry in entries.iterdir():
-#         if entry.name == f'class_{i}':
-#             data = np.genfromtxt(entry, delimiter=',')
-#             print(data[0][0])
-#             # np.append(data, [[1.0]], axis=0)
-#             print(data[0])
-#             # i += 1
-#     # print(data)
+    iris_test = add_ones[:test_set]
+    iris_training = add_ones[test_set:]
 
-# one = []
-# for i in range(len(data)):  # array with ones, sa long as data
-#     one.append(1.0)
-#
-# d = np.append(data, one, axis=1)
-# print(d)
-#
-# print(one)
-# print(len(one))
-# print(len(data))
-# # print(data)
-
-# data1 = data[0]
-# print(data1)
-#
-# data = [1, 2, 3, 4]
-# data.insert(len(data), 1.0)
-#
-# print(data)
-# data = np.fromfile(filename, dtype=float, count=-1, sep=",")
-# print(data)
-
-# vektor med enere
+    return iris_test, iris_training
 
 
-filename = 'C:\\Users\\amand\Documents\\NTNU studier\\6. semester øvinger\\Estimering\\Iris_TTT4275\\class_1'
+D = 4+1  #features
+C = 3  #classes
+no_test = 20  # number of tests
+setosa_test, setosa_training = ones_divide(".\\Iris_TTT4275\\class_1", no_test, D)
+versicolor_test, versicolor_training = ones_divide(".\\Iris_TTT4275\\class_2", no_test, D)
+virginica_test, virginica_training = ones_divide(".\\Iris_TTT4275\\class_3", no_test, D)
 
-data = np.genfromtxt('C:\\Users\\amand\Documents\\NTNU studier\\6. semester øvinger\\Estimering\\Iris_TTT4275\\class_1', dtype='float_',delimiter=',')
-data1 = np.loadtxt(filename, dtype='float_', delimiter=',')
-print(data1)
-
+iris_label = np.loadtxt(".\\Iris_TTT4275\\iris.data", dtype='S', delimiter=',')  # 50 sampels pr flower
+label = iris_label[:,0:3].astype('float_')
